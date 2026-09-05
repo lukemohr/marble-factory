@@ -2,12 +2,22 @@
 
 use std::time::Duration;
 
-use crate::PartId;
+use crate::{DeviceId, PartId};
 
 /// A fact that occurred in the factory.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Event {
-    PartCreated { part_id: PartId },
+    PartCreated {
+        part_id: PartId,
+    },
+    PartEnteredConveyor {
+        part_id: PartId,
+        conveyor_id: DeviceId,
+    },
+    PartExitedConveyor {
+        part_id: PartId,
+        conveyor_id: DeviceId,
+    },
 }
 
 /// An event with metadata that applies to every factory event.

@@ -6,8 +6,9 @@ communication patterns stay understandable as it grows.
 
 ## Current status
 
-Chunk 2, *Deterministic simulation time*, is in progress. Chunk 1, *Workspace
-and domain vocabulary*, is complete. The workspace contains two crates:
+Chunk 3, *Parts moving through conveyor segments*, is in progress. Chunks 1
+and 2—*Workspace and domain vocabulary* and *Deterministic simulation
+time*—are complete. The workspace contains two crates:
 
 ```text
 protocol  <-  simulator
@@ -49,6 +50,24 @@ cargo test --workspace
 | Tick events | None in the domain-event stream | Update cycles are execution details; add a purpose-built diagnostics or control mechanism only when a real consumer needs step boundaries. |
 | Event ordering | `sim_time` for occurrence time; `sequence` for total order | Same-time events are valid; sequence is strictly increasing and local to one factory simulation, so stream order wins when exact ordering matters. |
 | Simulator organization | Internal `factory` module | The factory and its tests are now a cohesive unit; `main.rs` stays reserved for a later runtime loop. |
+| Conveyor position | 1D conveyor-local distance | A part's source-of-truth position is distance from its conveyor entry; future 2D layout will derive world coordinates from conveyor geometry. |
+| Initial conveyor topology | One internal `Conveyor` field | Matches the single-device model now; device IDs in state and events preserve a localized path to multiple devices and ordered routing later. |
+| Distance representation | Internal `f64` meters | Supports fractional motion and future geometry naturally; values must remain finite and non-negative, and derived-position tests use a tolerance. |
+| Conveyor speed | Private mutable operating state | Chunk 3 initializes finite positive speed and holds it constant; future controls may set it to zero without conflating operating state with fixed conveyor length. |
+| Part state ownership | Factory-owned `Part` with `PartLocation` | Each part has one authoritative lifecycle/location record, preventing duplicate placement and creating a clean future persistence mapping. |
+| Part creation | Creates an unplaced part | Identity creation and equipment placement are separate lifecycle transitions with separate domain events. |
+| Conveyor placement API | `place_part_on_conveyor(part_id, conveyor_id) -> Result` | A conveyor is the only real destination today; explicit errors handle unknown IDs and invalid lifecycle transitions without a generic error framework. |
+| Conveyor lifecycle events | Minimal entry/exit payloads | Events carry `part_id` and `conveyor_id`; entry is implicitly position zero, exit is configured end, and `FactoryEvent.sim_time` supplies occurrence time. |
+| Routine motion events | None | Position changes remain simulator state so lifecycle history is independent of update frequency; later HMI telemetry can use snapshots or a separate stream. |
+| Conveyor boundary | Point particle exits at `position == length` | Valid on-conveyor state is `0 ≤ position < length`; placement begins at zero and arbitrary manual positions are not modeled. |
+| Crossing timestamps | Exact in-step interpolation | Exit time is update start plus `(length − position) / speed`, preserving physical event time across equivalent timestep partitions. |
+| Crossing-time conversion | `Duration::from_secs_f64` under validated invariants | Finite positive length/speed and valid positions produce finite non-negative travel times while preserving a single simulation-clock type. |
+| Post-exit state | `PartLocation::Exited` | Exit is committed before its event is returned. Provenance belongs in event history; transfer-ready states wait for real routing behavior. |
+| Part-state query | `part_location(part_id) -> Option<PartLocation>` | An internal read-only lifecycle view supports tests without exposing collections; future HMI state will use a dedicated protocol snapshot. |
+| Exit ordering within an update | Crossing time, then numeric `PartId` | The factory detects all exits, commits state, and assigns sequences after sorting; equal-time order is deterministic and independent of storage layout. |
+| Identifier tie-breaker | `PartId::value()` accessor | A numeric accessor is justified for the agreed deterministic tie-breaker without broadly promising semantic ordering through `Ord`. |
+| Conveyor implementation | Internal `Conveyor`, `Part`, and `PartLocation` modules | Each has current cohesive state/invariants; `Factory` continues to coordinate lifecycle, motion, event sequencing, and time. |
+| Update result | Keep `update(dt) -> Vec<FactoryEvent>` | Real motion produces multiple precise, deterministically ordered transitions without exposing a need for an event queue or callback. |
 
 ## Development conventions
 
@@ -60,6 +79,6 @@ cargo test --workspace
 
 ## Near-term scope
 
-Chunk 2 introduces an explicit, caller-controlled simulation clock and a
-deterministic update loop. Async runtime, networking, serialization, UI, and
-persistence remain out of scope.
+Chunk 3 adds one straight conveyor and deterministic part movement, including
+exact event times when a part crosses the conveyor boundary. Async runtime,
+networking, serialization, UI, and persistence remain out of scope.
