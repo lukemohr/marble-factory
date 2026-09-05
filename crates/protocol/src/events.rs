@@ -1,5 +1,7 @@
 //! Events emitted by the factory.
 
+use std::time::Duration;
+
 use crate::PartId;
 
 /// A fact that occurred in the factory.
@@ -12,5 +14,7 @@ pub enum Event {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FactoryEvent {
     pub sequence: u64,
+    /// Elapsed simulation time when this event occurred.
+    pub sim_time: Duration,
     pub event: Event,
 }

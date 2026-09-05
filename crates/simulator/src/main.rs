@@ -1,9 +1,11 @@
 use protocol::{Event, FactoryEvent, PartId};
+use std::time::Duration;
 
 /// The in-memory state of the simulated factory.
 // The binary gains its runtime loop in a later chunk; tests exercise this state today.
 #[cfg_attr(not(test), allow(dead_code))]
 struct Factory {
+    sim_time: Duration,
     next_part_id: u64,
     next_event_sequence: u64,
 }
@@ -13,6 +15,7 @@ impl Factory {
     /// Creates an empty factory whose IDs and event sequences begin at zero.
     fn new() -> Self {
         Self {
+            sim_time: Duration::ZERO,
             next_part_id: 0,
             next_event_sequence: 0,
         }
@@ -28,6 +31,7 @@ impl Factory {
 
         FactoryEvent {
             sequence,
+            sim_time: self.sim_time,
             event: Event::PartCreated { part_id },
         }
     }
@@ -55,6 +59,13 @@ mod tests {
                 part_id: PartId::new(0)
             }
         );
+    }
+
+    #[test]
+    fn created_part_at_start_has_zero_simulation_time() {
+        let mut factory = Factory::new();
+
+        assert_eq!(factory.create_part().sim_time, Duration::ZERO);
     }
 
     #[test]

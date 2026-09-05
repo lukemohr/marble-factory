@@ -6,8 +6,8 @@ communication patterns stay understandable as it grows.
 
 ## Current status
 
-Chunk 1, *Workspace and domain vocabulary*, is complete. The workspace is
-healthy and contains two crates:
+Chunk 2, *Deterministic simulation time*, is in progress. Chunk 1, *Workspace
+and domain vocabulary*, is complete. The workspace contains two crates:
 
 ```text
 protocol  <-  simulator
@@ -36,6 +36,12 @@ cargo test --workspace
 | ID and sequence allocation | `Factory`, starting at `0` | The factory owns part creation, so it owns its counters; a separate allocator has no current use. |
 | Empty factory construction | `Factory::new()` and `Default` | An empty zero-based factory has one clear default state. |
 | Simulator visibility | Binary-only internal `Factory` | Expose a simulator library only when another component actually needs in-process access. |
+| Simulation-time semantics | Elapsed, caller-controlled time since simulation start | It begins at zero and advances monotonically only through explicit updates; future wall-clock scheduling remains outside the deterministic factory. |
+| Simulation-time representation | `std::time::Duration` | Standard-library elapsed-time value with non-negative semantics; no fixed precision or external dependency is needed yet. |
+| Event timestamps | `FactoryEvent.sim_time` in the protocol | An event records the factory's elapsed simulation time when it occurred—not wall-clock time or an event duration. Sequence remains the total order for same-time events. |
+| Clock storage | Private `Factory::sim_time: Duration` field | The factory is the only clock owner today; extract a `SimulationClock` only when it gains independent behavior such as scheduling or pause/rate control. |
+| Time advancement | Caller-supplied delta to `Factory::update(dt)` | Callers control elapsed time explicitly, making replay direct and preventing backward progression by API shape. |
+| Update event collection | `update()` returns `Vec<FactoryEvent>` | State changes and their time-driven effects are returned together; revisit an internal queue or sink only when a current need appears. |
 
 ## Development conventions
 
@@ -47,7 +53,6 @@ cargo test --workspace
 
 ## Near-term scope
 
-Chunk 1 added strongly typed IDs, basic device descriptions, a minimal event
-envelope, and a small `Factory` that emits `PartCreated` events. The next
-milestone is deterministic simulation time; async runtime, networking,
-serialization, UI, and persistence remain out of scope.
+Chunk 2 introduces an explicit, caller-controlled simulation clock and a
+deterministic update loop. Async runtime, networking, serialization, UI, and
+persistence remain out of scope.
