@@ -20,4 +20,9 @@ impl PartId {
     pub const fn new(value: u64) -> Self {
         Self(value)
     }
+
+    /// Returns the numeric value used for deterministic ordering when needed.
+    pub const fn value(self) -> u64 {
+        self.0
+    }
 }

@@ -87,7 +87,11 @@ As Chunk 2 proceeds, add decisions here.
 | 15 — Deterministic tests | Complete | Tests cover initial time, deltas, zero updates, timestamps, same-time ordering, overflow, deterministic replay, and partitioned advancement with no time-driven state. |
 | 16 — Event ordering semantics | Complete | `sim_time` means occurrence time; factory-local `sequence` is the unique total order. Same-time events are valid, and monotonic time prevents later sequences from having earlier timestamps. |
 | 17 — Module organization | Complete | Extracted the cohesive `Factory` implementation and tests into internal `simulator::factory`; `main.rs` remains the intentionally minimal binary entry point. |
-| 18 — Public API review | Pending final review | |
+| 18 — Public API review | Complete | `protocol` remains schema-only; `Factory` owns a private monotonic clock and exposes only intentional behavior. No wall-clock, async, or extra dependencies were introduced. |
+
+**Chunk 2 complete.** The simulator has a deterministic, caller-driven clock;
+timestamped events; and a zero-event update loop ready for future time-driven
+factory behavior.
 
 ---
 
