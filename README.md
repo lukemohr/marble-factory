@@ -26,7 +26,10 @@ cargo test --workspace
 | Initial project layout | Cargo workspace | Makes the protocol boundary explicit before more components are added. |
 | Dependency direction | `simulator` depends on `protocol` | Shared boundary data must not depend on simulation behavior. |
 | External dependencies in Chunk 1 | None | Add a dependency only when a current requirement justifies it. |
-| Identifier storage | `u64` (pending newtype design) | Simple and deterministic; avoids random UUID generation in the simulator. |
+| Identifiers | Private `u64` newtypes | `PartId` and `DeviceId` cannot be mixed accidentally; values remain deterministic. |
+| ID traits | `Debug`, `Clone`, `Copy`, `PartialEq`, `Eq`, `Hash` | Supports tests, inexpensive passing, equality, and future map keys without implying meaningful ordering. |
+| Protocol organization | Schema-focused modules in `protocol` | `ids`, `devices`, and later `events` organize boundary data without introducing a redundant crate. |
+| Device categories | `DeviceKind` in `protocol` | Device category is shared descriptive data; device behavior remains outside the protocol. |
 
 ## Development conventions
 

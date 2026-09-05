@@ -108,7 +108,9 @@ This section records decisions and implementation progress as Chunk 1 proceeds.
 | 0 — Verify repository | Complete | The repository root is `marble-factory`; no Rust workspace existed and no project files were overwritten. |
 | 1 — Initialize workspace | Complete | Chose workspace-first: a root Cargo workspace with `protocol` and `simulator` members. |
 | 2 — Create workspace | Complete | `simulator` has a local dependency on `protocol`; no external dependencies were added; `cargo test --workspace` passes. |
-| 3 — ID representation | Pending | Chose `u64` over UUIDs for simplicity and deterministic simulation. The raw-alias vs. newtype decision remains next. |
+| 3 — ID representation | Complete | Chose private `u64` newtypes over UUIDs and raw aliases: `PartId` and `DeviceId` have `const` constructors. |
+| 4 — ID traits | Complete | Derived `Debug`, `Clone`, `Copy`, `PartialEq`, `Eq`, and `Hash`; intentionally omitted ordering traits. |
+| 5 — Device kinds | Complete | Kept boundary data in the `protocol` schema crate, organized with `ids` and `devices` modules. Added data-only `DeviceKind`. |
 
 Supporting project files added during setup: root `.gitignore`, `README.md`,
 `rustfmt.toml`, and VS Code workspace settings.
