@@ -7,3 +7,10 @@ use crate::PartId;
 pub enum Event {
     PartCreated { part_id: PartId },
 }
+
+/// An event with metadata that applies to every factory event.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FactoryEvent {
+    pub sequence: u64,
+    pub event: Event,
+}

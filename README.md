@@ -32,6 +32,7 @@ cargo test --workspace
 | Device categories | `DeviceKind` in `protocol` | Device category is shared descriptive data; device behavior remains outside the protocol. |
 | Device descriptions | Public `DeviceDescriptor` fields | It has no invariants today. Revisit private fields and a constructor if validation, kind-specific configuration, or immutability requirements arise. |
 | Event representation | One `Event` enum | The near-term system has one event stream; consumers can exhaustively pattern-match its variants. |
+| Event metadata | Minimal `FactoryEvent` envelope | A sequence number orders every event; timestamps wait until simulation time has an explicit meaning. |
 
 ## Development conventions
 
