@@ -114,6 +114,7 @@ This section records decisions and implementation progress as Chunk 1 proceeds.
 | 6 — Device descriptions | Complete | Added public `DeviceDescriptor { id, kind }` data. Reconsider private fields and a constructor only if real descriptor invariants emerge. |
 | 7 — First event | Complete | Added `Event::PartCreated { part_id }` to a shared `events` module. Chose one enum because events will share a stream. |
 | 8–9 — Event envelope and time | Complete | Added public `FactoryEvent { sequence, event }`. Deliberately omitted timestamps until Chunk 2 defines simulation time. |
+| 10–12 — Factory state and tests | Complete | `Factory` privately owns zero-based part-ID and event-sequence counters. Tests cover first ID, distinct parts, and monotonic sequences through public behavior. `Default` represents the same empty state as `new()`. |
 
 Supporting project files added during setup: root `.gitignore`, `README.md`,
 `rustfmt.toml`, and VS Code workspace settings.

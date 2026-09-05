@@ -33,6 +33,8 @@ cargo test --workspace
 | Device descriptions | Public `DeviceDescriptor` fields | It has no invariants today. Revisit private fields and a constructor if validation, kind-specific configuration, or immutability requirements arise. |
 | Event representation | One `Event` enum | The near-term system has one event stream; consumers can exhaustively pattern-match its variants. |
 | Event metadata | Minimal `FactoryEvent` envelope | A sequence number orders every event; timestamps wait until simulation time has an explicit meaning. |
+| ID and sequence allocation | `Factory`, starting at `0` | The factory owns part creation, so it owns its counters; a separate allocator has no current use. |
+| Empty factory construction | `Factory::new()` and `Default` | An empty zero-based factory has one clear default state. |
 
 ## Development conventions
 
