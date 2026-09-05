@@ -83,9 +83,11 @@ As Chunk 2 proceeds, add decisions here.
 | 11 — Observe current time | Complete | Added the intentional read-only `Factory::sim_time()` query; clock storage remains private. |
 | 12 — Timestamp direct actions | Complete | `create_part()` emits at the factory's current simulation time. Multiple creations between updates correctly share a timestamp while sequence increases. |
 | 13 — First deterministic update | Complete | `update(dt)` uses checked addition to advance time and returns an empty `Vec` until time-driven behavior is added. |
-| 14 — Tick events | Pending decision | |
+| 14 — Tick events | Complete | `update()` emits no tick event. Future diagnostics or feedback coordination may use a purpose-built runtime/control signal instead of changing the domain-event stream. |
 | 15 — Deterministic tests | Complete | Tests cover initial time, deltas, zero updates, timestamps, same-time ordering, overflow, deterministic replay, and partitioned advancement with no time-driven state. |
-| 16 — Public API review | Pending final review | |
+| 16 — Event ordering semantics | Complete | `sim_time` means occurrence time; factory-local `sequence` is the unique total order. Same-time events are valid, and monotonic time prevents later sequences from having earlier timestamps. |
+| 17 — Module organization | Complete | Extracted the cohesive `Factory` implementation and tests into internal `simulator::factory`; `main.rs` remains the intentionally minimal binary entry point. |
+| 18 — Public API review | Pending final review | |
 
 ---
 

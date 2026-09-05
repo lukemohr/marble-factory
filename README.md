@@ -46,6 +46,9 @@ cargo test --workspace
 | Zero-duration update | Valid no-op | `update(Duration::ZERO)` preserves time and produces no events until immediate time-driven behavior exists. |
 | Simulation-time overflow | Checked addition, panic on overflow | An overflow is an invalid simulation run; failing loudly preserves time semantics without premature error infrastructure. |
 | Clock observation | Read-only `Factory::sim_time()` query | Current time is intentional observable behavior while its storage stays private. |
+| Tick events | None in the domain-event stream | Update cycles are execution details; add a purpose-built diagnostics or control mechanism only when a real consumer needs step boundaries. |
+| Event ordering | `sim_time` for occurrence time; `sequence` for total order | Same-time events are valid; sequence is strictly increasing and local to one factory simulation, so stream order wins when exact ordering matters. |
+| Simulator organization | Internal `factory` module | The factory and its tests are now a cohesive unit; `main.rs` stays reserved for a later runtime loop. |
 
 ## Development conventions
 
