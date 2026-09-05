@@ -1,0 +1,43 @@
+# Marble Factory
+
+A Rust learning project for a small simulated automated factory. The project is
+being built in small, testable increments so its domain boundaries and
+communication patterns stay understandable as it grows.
+
+## Current status
+
+Chunk 1, *Workspace and domain vocabulary*, is in progress. The workspace is
+healthy and contains two crates:
+
+```text
+protocol  <-  simulator
+```
+
+Run the complete test suite with:
+
+```bash
+cargo test --workspace
+```
+
+## Architectural decisions
+
+| Decision | Choice | Why |
+| --- | --- | --- |
+| Initial project layout | Cargo workspace | Makes the protocol boundary explicit before more components are added. |
+| Dependency direction | `simulator` depends on `protocol` | Shared boundary data must not depend on simulation behavior. |
+| External dependencies in Chunk 1 | None | Add a dependency only when a current requirement justifies it. |
+| Identifier storage | `u64` (pending newtype design) | Simple and deterministic; avoids random UUID generation in the simulator. |
+
+## Development conventions
+
+- Rust source is formatted with the repository's `rustfmt.toml` configuration.
+- VS Code settings format Rust on save, use rust-analyzer, display a 100-column
+  ruler, and enable Clippy checks.
+- The detailed implementation roadmap and decision record live in
+  [`plans/README_marble_factory_chunk1.md`](plans/README_marble_factory_chunk1.md).
+
+## Near-term scope
+
+Chunk 1 will add strongly typed IDs, basic device descriptions, a minimal event
+envelope, and a small `Factory` API that emits `PartCreated` events. It will not
+add async runtime, networking, serialization, UI, or persistence dependencies.

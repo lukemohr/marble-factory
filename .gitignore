@@ -1,0 +1,9 @@
+# Rust build output
+/target/
+
+# Operating-system metadata
+.DS_Store
+
+# Editor and IDE state
+.idea/
+.vscode/*.log
