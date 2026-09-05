@@ -108,7 +108,11 @@ Add decisions here as the chunk proceeds.
 | 15 — Multiple-exit ordering | Complete | Detect all exits, sort by crossing time then numeric `PartId`, commit `Exited`, and allocate sequences in that final order. `PartId::value()` was added for this concrete tie-breaker without deriving `Ord`. |
 | 16 — Motion implementation and tests | Complete | Added internal `Conveyor`, `Part`, and `PartLocation` modules; lifecycle events, validated placement, speed × time motion, precise in-step exits, partition invariance, non-round conversion, and multiple-part ordering are covered by tests. |
 | 17 — Update API review | Complete | Keep `update(dt) -> Vec<FactoryEvent>`. Multiple exact-time exits are detected, sorted, committed, and returned naturally; no queue or callback need emerged. |
-| 18 — Protocol and public API review | Pending final review | |
+| 18 — Protocol and public API review | Complete | `protocol` contains only boundary schema; simulator physical state remains internal; exact crossing-time lifecycle events are deterministic and update-frequency independent. All tests and checks pass. |
+
+**Chunk 3 complete.** The simulator models unplaced, on-conveyor, and exited
+parts on one straight conveyor, with exact in-step exit timestamps and
+deterministic event ordering.
 | 7 — Add conveyor-related protocol events | Not started | |
 | 8 — Implement motion within `update(dt)` | Not started | |
 | 9 — Decide boundary-crossing semantics | Not started | |

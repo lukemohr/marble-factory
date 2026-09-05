@@ -6,9 +6,9 @@ communication patterns stay understandable as it grows.
 
 ## Current status
 
-Chunk 3, *Parts moving through conveyor segments*, is in progress. Chunks 1
-and 2—*Workspace and domain vocabulary* and *Deterministic simulation
-time*—are complete. The workspace contains two crates:
+Chunks 1–3 are complete: *Workspace and domain vocabulary*, *Deterministic
+simulation time*, and *Parts moving through conveyor segments*. The workspace
+contains two crates:
 
 ```text
 protocol  <-  simulator
@@ -79,6 +79,7 @@ cargo test --workspace
 
 ## Near-term scope
 
-Chunk 3 adds one straight conveyor and deterministic part movement, including
-exact event times when a part crosses the conveyor boundary. Async runtime,
-networking, serialization, UI, and persistence remain out of scope.
+Chunk 3 added one straight conveyor and deterministic part movement, including
+exact event times when a part crosses the conveyor boundary. Future chunks can
+add sensors and other devices; async runtime, networking, serialization, UI,
+and persistence remain out of scope.
