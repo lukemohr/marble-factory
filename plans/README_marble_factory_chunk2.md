@@ -77,10 +77,15 @@ As Chunk 2 proceeds, add decisions here.
 | 5 — Introduce simulation clock state | Complete | `Factory` owns a direct private `sim_time: Duration` field, initialized to zero. A dedicated clock type is deferred until it has behavior beyond storing the current time. |
 | 6 — Define update API | Complete | Chose caller-supplied delta time: `Factory::update(dt)`. This keeps time progression explicit, replayable, and forward-only by construction. |
 | 7 — Decide event collection model | Complete | `update()` will return `Vec<FactoryEvent>`. This is intentionally revisitable if a concrete need for a queue or streaming sink emerges. |
-| 8 — Define zero-duration behavior | Not started | |
-| 9 — Define invalid/overflow behavior | Not started | |
-| 10 — Add deterministic tests | Not started | |
-| 11 — Public API review | Not started | |
+| 8 — Non-update actions | Complete | `create_part()` remains `-> FactoryEvent` while `update()` returns `Vec<FactoryEvent>`. The difference reflects guaranteed-one versus zero-or-more events, not inconsistent protocol semantics. |
+| 9 — Zero-duration behavior | Complete | `update(Duration::ZERO)` is a valid no-op: it preserves current simulation time and returns no events while no immediate work exists. |
+| 10 — Invalid/overflow behavior | Complete | `Duration` excludes negative deltas. Clock addition is checked and panics clearly on overflow; saturation would silently corrupt time semantics, and `Result` is premature here. |
+| 11 — Observe current time | Complete | Added the intentional read-only `Factory::sim_time()` query; clock storage remains private. |
+| 12 — Timestamp direct actions | Complete | `create_part()` emits at the factory's current simulation time. Multiple creations between updates correctly share a timestamp while sequence increases. |
+| 13 — First deterministic update | Complete | `update(dt)` uses checked addition to advance time and returns an empty `Vec` until time-driven behavior is added. |
+| 14 — Tick events | Pending decision | |
+| 15 — Deterministic tests | Complete | Tests cover initial time, deltas, zero updates, timestamps, same-time ordering, overflow, deterministic replay, and partitioned advancement with no time-driven state. |
+| 16 — Public API review | Pending final review | |
 
 ---
 

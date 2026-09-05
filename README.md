@@ -42,6 +42,10 @@ cargo test --workspace
 | Clock storage | Private `Factory::sim_time: Duration` field | The factory is the only clock owner today; extract a `SimulationClock` only when it gains independent behavior such as scheduling or pause/rate control. |
 | Time advancement | Caller-supplied delta to `Factory::update(dt)` | Callers control elapsed time explicitly, making replay direct and preventing backward progression by API shape. |
 | Update event collection | `update()` returns `Vec<FactoryEvent>` | State changes and their time-driven effects are returned together; revisit an internal queue or sink only when a current need appears. |
+| Mutation event shapes | Direct actions return one event; `update()` returns many-or-none | `create_part()` always creates one part, whereas a time interval can produce zero or more effects. |
+| Zero-duration update | Valid no-op | `update(Duration::ZERO)` preserves time and produces no events until immediate time-driven behavior exists. |
+| Simulation-time overflow | Checked addition, panic on overflow | An overflow is an invalid simulation run; failing loudly preserves time semantics without premature error infrastructure. |
+| Clock observation | Read-only `Factory::sim_time()` query | Current time is intentional observable behavior while its storage stays private. |
 
 ## Development conventions
 
