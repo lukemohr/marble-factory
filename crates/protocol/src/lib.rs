@@ -3,5 +3,5 @@
 pub mod devices;
 pub mod ids;
 
-pub use devices::DeviceKind;
+pub use devices::{DeviceDescriptor, DeviceKind};
 pub use ids::{DeviceId, PartId};

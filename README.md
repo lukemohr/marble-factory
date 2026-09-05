@@ -30,6 +30,7 @@ cargo test --workspace
 | ID traits | `Debug`, `Clone`, `Copy`, `PartialEq`, `Eq`, `Hash` | Supports tests, inexpensive passing, equality, and future map keys without implying meaningful ordering. |
 | Protocol organization | Schema-focused modules in `protocol` | `ids`, `devices`, and later `events` organize boundary data without introducing a redundant crate. |
 | Device categories | `DeviceKind` in `protocol` | Device category is shared descriptive data; device behavior remains outside the protocol. |
+| Device descriptions | Public `DeviceDescriptor` fields | It has no invariants today. Revisit private fields and a constructor if validation, kind-specific configuration, or immutability requirements arise. |
 
 ## Development conventions
 

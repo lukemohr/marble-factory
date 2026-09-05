@@ -111,6 +111,7 @@ This section records decisions and implementation progress as Chunk 1 proceeds.
 | 3 — ID representation | Complete | Chose private `u64` newtypes over UUIDs and raw aliases: `PartId` and `DeviceId` have `const` constructors. |
 | 4 — ID traits | Complete | Derived `Debug`, `Clone`, `Copy`, `PartialEq`, `Eq`, and `Hash`; intentionally omitted ordering traits. |
 | 5 — Device kinds | Complete | Kept boundary data in the `protocol` schema crate, organized with `ids` and `devices` modules. Added data-only `DeviceKind`. |
+| 6 — Device descriptions | Complete | Added public `DeviceDescriptor { id, kind }` data. Reconsider private fields and a constructor only if real descriptor invariants emerge. |
 
 Supporting project files added during setup: root `.gitignore`, `README.md`,
 `rustfmt.toml`, and VS Code workspace settings.
