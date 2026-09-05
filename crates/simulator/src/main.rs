@@ -1,14 +1,17 @@
 use protocol::{Event, FactoryEvent, PartId};
 
 /// The in-memory state of the simulated factory.
-pub struct Factory {
+// The binary gains its runtime loop in a later chunk; tests exercise this state today.
+#[cfg_attr(not(test), allow(dead_code))]
+struct Factory {
     next_part_id: u64,
     next_event_sequence: u64,
 }
 
+#[cfg_attr(not(test), allow(dead_code))]
 impl Factory {
     /// Creates an empty factory whose IDs and event sequences begin at zero.
-    pub fn new() -> Self {
+    fn new() -> Self {
         Self {
             next_part_id: 0,
             next_event_sequence: 0,
@@ -16,7 +19,7 @@ impl Factory {
     }
 
     /// Creates a part and returns the event describing that creation.
-    pub fn create_part(&mut self) -> FactoryEvent {
+    fn create_part(&mut self) -> FactoryEvent {
         let part_id = PartId::new(self.next_part_id);
         self.next_part_id += 1;
 

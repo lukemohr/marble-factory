@@ -115,6 +115,7 @@ This section records decisions and implementation progress as Chunk 1 proceeds.
 | 7 — First event | Complete | Added `Event::PartCreated { part_id }` to a shared `events` module. Chose one enum because events will share a stream. |
 | 8–9 — Event envelope and time | Complete | Added public `FactoryEvent { sequence, event }`. Deliberately omitted timestamps until Chunk 2 defines simulation time. |
 | 10–12 — Factory state and tests | Complete | `Factory` privately owns zero-based part-ID and event-sequence counters. Tests cover first ID, distinct parts, and monotonic sequences through public behavior. `Default` represents the same empty state as `new()`. |
+| 13 — Public API review | Complete | `protocol` exposes schema-only data; `simulator` remains a binary with an internal `Factory` until another component needs a library API. |
 
 Supporting project files added during setup: root `.gitignore`, `README.md`,
 `rustfmt.toml`, and VS Code workspace settings.

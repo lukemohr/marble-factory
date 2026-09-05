@@ -6,7 +6,7 @@ communication patterns stay understandable as it grows.
 
 ## Current status
 
-Chunk 1, *Workspace and domain vocabulary*, is in progress. The workspace is
+Chunk 1, *Workspace and domain vocabulary*, is complete. The workspace is
 healthy and contains two crates:
 
 ```text
@@ -35,6 +35,7 @@ cargo test --workspace
 | Event metadata | Minimal `FactoryEvent` envelope | A sequence number orders every event; timestamps wait until simulation time has an explicit meaning. |
 | ID and sequence allocation | `Factory`, starting at `0` | The factory owns part creation, so it owns its counters; a separate allocator has no current use. |
 | Empty factory construction | `Factory::new()` and `Default` | An empty zero-based factory has one clear default state. |
+| Simulator visibility | Binary-only internal `Factory` | Expose a simulator library only when another component actually needs in-process access. |
 
 ## Development conventions
 
@@ -46,6 +47,7 @@ cargo test --workspace
 
 ## Near-term scope
 
-Chunk 1 will add strongly typed IDs, basic device descriptions, a minimal event
-envelope, and a small `Factory` API that emits `PartCreated` events. It will not
-add async runtime, networking, serialization, UI, or persistence dependencies.
+Chunk 1 added strongly typed IDs, basic device descriptions, a minimal event
+envelope, and a small `Factory` that emits `PartCreated` events. The next
+milestone is deterministic simulation time; async runtime, networking,
+serialization, UI, and persistence remain out of scope.
